@@ -18,6 +18,8 @@ This is NOT about a victory or win.
 
 Instead, this is about how losing taught me more than any victory could have done.
 
+---
+
 ### The CCDC Qualifiers
 
 The Collegiate Cyber Defense Competition, or CCDC, is a competition where multiple teams compete in a business-like scenario to secure a network against an active red team. Only the top 8 teams are allowed to move onto Regionals, where the stakes are much higher.

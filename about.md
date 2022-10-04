@@ -4,8 +4,7 @@ layout: page
 ---
 ![Profile Image]({% if site.external-image %}{{ site.picture }}{% else %}{{ site.url }}/{{ site.picture }}{% endif %})
 
-<p>Hello! My name is Taylor. I'm currently a univeristy student studying about cybersecurity. Pictured 
-above is me sitting on a throne of Monster energy drinks.</p>
+<p>Hello! My name is Taylor. I'm currently a univeristy student studying about cybersecurity.</p>
 
 <p>Currently, my main focus lies within the areas of penetrationg testing, red teaming, and payload 
 development. I also have experience in computer networking, security engineering, and cloud technologies.</p>
