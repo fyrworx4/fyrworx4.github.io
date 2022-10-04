@@ -12,7 +12,7 @@ picture: assets/images/profile.jpg
 
 # your site color theme, true for dark theme, 
 # false to light theme, auto to switch with system.
-dark-theme: false
+dark-theme: auto
 
 # If you want to include your resume, set to true
 # and specify source (external or local).
@@ -31,14 +31,14 @@ permalink: /:title/
 # if you don't want comments in your posts, leave categories empty
 disqus:
   shortname: github # enter this from your disqus account
-  categories: [blog, project] # only show disqus for posts that have these categories
+  categories:  # only show disqus for posts that have these categories
 
 # if you don't have any of social below, comment the line
 # facebook: myfacebook
-twitter: mytwitter
+twitter: oneoneonedotone
 # instagram: myinstagram
-linkedin: mylinkedin
-github: mygithub
+linkedin: taylorsnguyen
+github: fyrworx4
 # email: myemail@gmail.com
 
 authors:
