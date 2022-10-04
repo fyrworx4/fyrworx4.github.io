@@ -42,7 +42,7 @@ github: fyrworx4
 # email: myemail@gmail.com
 
 authors:
-  johndoe:
+  taylornguyen:
     name: Taylor Nguyen
     bio: Cybersecurity and other stuff
     external-image: false
@@ -85,7 +85,7 @@ post-advance-links: [blog]
 show-author: true
 
 # do you want some animations?
-animation: true
+animation: false
 
 # add default values to specific pages or layouts
 defaults:
