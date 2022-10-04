@@ -23,10 +23,10 @@ Here's how we did it.
 
 ---
 
-### The Setup
+### The setup
 Red vs. Blue was originally a training exercise/scrimmage for high school CyberPatriot teams who made it to Nationals, but last year our organization decided to make it available for college students as well. Preparing for this version of Red vs. Blue began in the summer.
 
-### The Theme and Setting
+### The theme and setting
 My good friend Alex pitched a Star Wars themed idea, which we all enjoyed, so we went with a Star Wars theme.
 
 ### Networking
@@ -42,7 +42,7 @@ A red team network was added to the core network and consisted of Kali machines 
 
 All of this was done on a vSphere cluster.
 
-### Vulnerable Machines
+### Vulnerable machines
 Another good friend of mine, Gabe, led the creation of vulnerable and misconfigured machines. We had four machines in total:
 
 - Windows Server 2012 (Communications)
@@ -52,12 +52,12 @@ Another good friend of mine, Gabe, led the creation of vulnerable and misconfigu
 
 Each machine contains services that were scored for uptime. We did our best to fit the environment with our theme, but it is still funny to imagine a futuristic Star Wars ship run a mail server in the engines.
 
-### Scoring Engine
+### Scoring engine
 The scoring engine, built from Python, scores service uptime by simulting users accessing business-critical services, such as using SSH to remotely log into an SSH server or initiating a RDP authentication request to an RDP server. [Here’s the repo.](https://github.com/fyrworx4/PulseEngine-ScoringEngine)
 
 There were two components to the scoring engine - the user web interface and the pollers. Credits to Nathan and Silas for building/developing the user web interface (which you can access by going here). I worked with Gabe and a CCDC team member, Jacob, to add more capabilities to the scoring engine, such as scoring a MySQL and IRC server.
 
-### The Competition
+### The competition
 Setting up the environment was a project of its own, but the logitstics of how the event is run needs to be planned. We needed to answer questions such as:
 
 - How are teams created? How will teams communicate?
@@ -66,7 +66,7 @@ Setting up the environment was a project of its own, but the logitstics of how t
 
 We settled on Discord to manage everything, both the internal operations of Red vs. Blue and the communication for teams. Alex set up an Apache Guacamole instance as a jump box where competitiors can access their team environment, so we needed to explain the process of how to connect to the environment using Apache Guacamole, especially to those who have never heard of a jump box before.
 
-### Lessons Learned
+### Lessons learned
 Red vs. Blue was a very large project that took many hours to accomplish. But many of those hours were from the last two weeks before the event. I wished that we started earlier, because towards the competition, I had to start pinging everyone on Discord to update the team on the statuses on the boxes.
 
 Personally, it gave me some insight on how to manage and delegate tasks. Working on Red vs. Blue has taught me a lot about patience and how to make sure that everyone’s on the same page.
