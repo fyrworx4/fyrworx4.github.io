@@ -34,26 +34,20 @@ disqus:
   categories: [blog, project] # only show disqus for posts that have these categories
 
 # if you don't have any of social below, comment the line
-facebook: myfacebook
+# facebook: myfacebook
 twitter: mytwitter
-instagram: myinstagram
+# instagram: myinstagram
 linkedin: mylinkedin
 github: mygithub
-email: myemail@gmail.com
+# email: myemail@gmail.com
 
 authors:
   johndoe:
-    name: John Doe
-    bio: A Man who travels the world eating noodles
+    name: Taylor Nguyen
+    bio: Cybersecurity and other stuff
     external-image: false
     picture: assets/images/profile.jpg
-    twitter: johndoe
-  jamesfoster:
-    name: James Foster
-    bio: A Man who develops software with coffee
-    external-image: false
-    picture: assets/images/james.jpg
-    twitter: jamesfoster
+    twitter: oneoneonedotone
 
 # do you want a larger site? change the option below
 # options: [normal, large] | default: normal
