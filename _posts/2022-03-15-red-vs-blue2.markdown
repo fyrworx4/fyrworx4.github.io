@@ -1,5 +1,5 @@
 ---
-title: Red vs. Blue - Leveraging the Cloud
+title: Red vs. Blue - VPN Upgrades and AWS Mishaps
 layout: post
 date: 2022-03-15 22:01
 image: /assets/images/markdown.jpg
@@ -8,7 +8,7 @@ tag:
 - rvb
 category: blog
 author: taylornguyen
-description: The best way to get rid of $2,000
+description: The best way to get rid of $2.6k
 ---
 
 Ever since we held our Red vs. Blue last semester, we've made significant changes on the way Red vs. Blue was managed - both from a techincal standpoint and a logistical standpoint.
@@ -18,11 +18,13 @@ Last Red vs. Blue event acted like a dry-run for our high-school version of Red 
 ---
 
 ### Task delegation improvements
+
 Last semester, I had to step in as the project manager for Red vs. Blue - making sure that boxes were created, networking configured, etc.
 
 This semester, that changed. My eboard members took the charge of managing Red vs. Blue and my main role was listening to status updates. And network troubleshooting (I will get to that in a bit!)
 
 ### New scoring engine
+
 The [old scoring engine](https://github.com/fyrworx4/PulseEngine-ScoringEngine) had many problems:
 
 - Too complex.
@@ -32,6 +34,7 @@ The [old scoring engine](https://github.com/fyrworx4/PulseEngine-ScoringEngine) 
 So we looked into a [new scoring engine](https://github.com/scoringengine/scoringengine), which had a ton more features and looked nicer. We needed to do lots of troubleshooting to get this to work, but overwall it was easier to manage and displayed the scores in a better format. Thank you to the contributors that made this scoring engine!
 
 ### Networking upgrades
+
 One of the previous issues we had during Red vs. Blue in the fall was that red team couldn't use their own Kali VMs on our host machines - they had to use VMs that were hosted in our lab. In an ideal world, our red team would use their customized Kali VMs to VPN into the TelcoLab and be able to perform reverse shells from blue team machines.
 
 But we promised this for next Red vs. Blue, so we had no choice but to deliver.
@@ -55,6 +58,7 @@ There were some rules that allowed specific traffic, but the main culprit was th
 So by seting UFW to allow routed traffic, red team can now get reverse shells from their local VMs.
 
 ### AWS
+
 For one of the Red vs. Blue competitions, we tried out AWS to host our entire infrastructure. We estimated that it'll be around $200 to host a 4-hour competition - if we use spot instances.
 
 But for some reason, we didn't use spot instances - it make the automation too complicated so we resorted to using On-Demand instances, which increased our costs around 4x. Green Team also went ham with creating AMIs and restoring EC2 instances (On-Demand!), which generated a lot of EBS overhead. We also needed to spin up tons of Kali machines because they kept breaking.
@@ -62,6 +66,7 @@ But for some reason, we didn't use spot instances - it make the automation too c
 I became $2.6K in debt. Luckily, we reached out to AWS and they refunded our incurred costs.
 
 ### Red teaming
-Besides destroying my bank account, I got to red team this semester! I feel like I'm becoming part of the dark side by learning more about pentesting. I think this really opened up my interests and potential career path into red teaming.
+
+I also had the opportunity to be part of the red team this RvB. I feel like I'm becoming part of the dark side by learning more about pentesting. I think this really opened up my interests and potential career path into red teaming.
 
 Definitely a cool experience and enjoyed eating the free pizza.

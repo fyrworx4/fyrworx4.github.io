@@ -23,7 +23,7 @@ Preparation and development of Red vs. Blue competition involves few major steps
 
 To read more about RvB, check out this blog by [CPP SWIFT](https://www.calpolyswift.org/blog/rvb-2022-spring).
 
-This is going to be an update to [my first RvB post](https://tsnguyen.com/red-vs-blue/), so please check my previous post out if you haven't already.
+This is going to be an update to [my first RvB post](https://tsnguyen.com/red-vs-blue/) and [my second RvB post](https://tsnguyen.com/red-vs-blue2/), so please check my previous post out if you haven't already.
 
 ### Previous Red vs. Blue networking configuration
 
@@ -49,9 +49,23 @@ We can make a port group for each of these:
 - a new port group for all engineering VMs called "Engineering Port Group",
 - and so on and so forth.
 
-We can then create logical rules or policies on each port group. For example, if we want to implement traffic shaping on our production VMs, we can do so by editing the traffic policies on the production VMs' port group without affecting the development VMs and engineering VMs.
+We'll also assume that all Production VMs are connected to the Production Port Group, all Development VMs are connected to the Development Port Group, and all Engineering VMs are connected to the Engineering Port Group.
+
+We can also create logical rules or policies on each port group. For example, if we want to implement traffic shaping on our Production VMs, we can do so by editing the traffic policies on the Production Port Group without affecting the Development Port Group and the Engineering Port Group.
 
 ESXi port groups are a totally different concept than things like port bonding, port aggregation, etc. If you want to learn more, [this article](https://vmiss.net/vmware-vsphere-networking/) has a good read on vSphere networking.
+
+Another term we must talk about are the actual ethernet ports of the ESXi servers (which were PowerEdges). The physical, ethernet ports of the ESXis are referred to as "vmnics". Each vmnic port has its own ID, starting from zero. So if we had four ethernet ports, our vmnics would be as follows:
+- vmnic0
+- vmnic1
+- vmnic2
+- vmnic3
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-vmnic.png" />
+</p>
+
+(literally, those ethernet ports are called vmnics in ESXi language)
 
 ### 1-to-1 NAT
 
@@ -86,7 +100,7 @@ Simply put, with a standard switch without VLANs, you can only attach one networ
   <img src="../assets/images/red-vs-blue/rvb-networking-no-vlan.png" />
 </p>
 
-Each network would need to be physicaly separated with two different physical switches. However, with VLANs, you can attach multiple, logically separateed networks on a single switch.
+Each network would need to be physicaly separated with two different physical switches. However, with VLANs, you can attach multiple, logically separated networks on a single switch.
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan.png" />
@@ -149,30 +163,74 @@ As you can see, by "unwrapping" our VLAN configuration from our network, our top
 
 In other words, the interactions and communications between the VMs remain the same and networking works the same as the previous topology. However, with VLANs, we can reduce the number of vSwitches created, reducing our networking overhead on our ESXi instance.
 
-### vSphere clustering and dSwitches
+### vSphere distributed switches
 
-We also had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff. However, instead of using vSwitches, we had to use distributed switches, or dSwitches for short.
+We also had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff.
+
+However, now with a vSphere cluster instead of individual ESXis, we had to use distributed switches, or dSwitches for short.
 
 vSwitches and dSwitches do pretty much the same thing, except vSwitches are unique per ESXi, while dSwitches exist for all ESXi's in a cluster.
 
 The way that I visualize dSwitches is as a very wide switch that spans across all of our ESXi machines:
 
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch.png" />
+</p>
 
+When we configured dSwitches initially, we were prompted for many other options (such as uplinks, *hint hint*), which I wasn't really familiar with so I just skipped those steps.
 
-When we configured dSwitches initially, we were prompted for many other options, like uplinks, which I wasn't really familiar with so I just skipped those steps. After creating our dSwitch and our port groups with unique VLAN IDs, we ran into another issue. The issue was that machines on different ESXi's weren't able to communicate with each other. After much troubleshooting, I figured out that the issue was because the dSwitches weren't configured with uplinks. Uplinks allowed the dSwitch to operate across multiple ESXis. Without the uplink, the dSwitch would still exist across the ESXis (you can still add port groups and connect VMs to those port groups) but each ESXi would treat the dSwitch as their own local vSwitch. This means that VMs on the same ESXi on the same dSwitch can communicate with each other, but VMs on different ESXis but on the same dSwitch can't communicate with each other.
+After creating our dSwitch and configuring our port groups with VLANs similar to what we had above, we expected the networking to work.
 
-The way that I was able to solve this issue was to create the uplinks. But how? This was how:
+However, this wasn't the case. We had an issue -- machines on different ESXis were not able to communicate with each other. This was a huge issue because even though we had clustering enabled, each VM was still "techincally" part of an individual ESXi for things like compute power. Also, when creating or cloning VMs, the VM's host ESXi would automatically be chosen.
 
-In my setup, the uplinks were attached to each ESXi's vmnic0, which was configured as a trunk port. Each of the vmnic0's were connected to switchports on some HP switch that were configured as trunk VLANs with VLANs 1000-2000 being allowed through the ports. These VLANs only existed on the switch level; no routers contained any configurations for VLANs 1000-2000.
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-issue.png" />
+</p>
 
-This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXi's, making this configuration an ideal way to abstract networking on the individual ESXi level.
+After much troubleshooting, I figured out what the issue was -- improper configuration of the uplinks (or lack thereof).
 
-### Replacing the core router
+Our dSwitches were configured without any uplinks, preventing each ESXi from being able to communicate any networking information with other ESXis.
 
-After reviewing the topology, I noticed that having a separate pfSense VM as a core router is repetitive. The core router's purpose was to create a 172.16.0.0/16 network. We can just make a new VLAN on the physical router with the 172.16.0.0/16 network and have that VLAN also be routed through the ESXis.
+Uplinks allow the dSwitch to operate across multiple ESXis. Without the uplink, the dSwitch would still exist across the ESXis (you can still add port groups and connect VMs to those port groups) but each ESXi would treat the dSwitch as their own local vSwitch.
 
-Also, the red team machines and the scoring engine are now placed on the 172.16.0.0/16 network. There's really no reason to have a separate red team subnet. The less networks, the better.
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-vswitch.png" />
+</p>
+
+After looking into the VMware documentation, I realized what I needed to do.
+
+I needed to configure the uplinks.
+
+But how? In any normal ESXi setup, configuring uplinks should be relatively straightforward, but with RvB networking in consideration, it became a challenge to figure out what exact settings I needed to put into place.
+
+First, I created a new dSwitch with 1 uplink. This setting refers to the number of uplinks per ESXi host, not the total number of uplinks on the dSwitch. Even though I have three ESXis in our environment, I will still need to enter in "1" for the number of uplinks.
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings.png" />
+</p>
+
+Then I clicked on the "Add and Manage Hosts" setting for the dSwitch, selected all my ESXi hosts to add to the dSwitch, and designated vmnic0 of all my ESXisto be attached to the dSwitch uplinks. After this step, there were extra settings for VMkernels and all that jazz but that's outside the scope of this post.
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings2.png" />
+</p>
+
+Then I went into the dSwitch's uplinks' port groups (which were automatically generated with a dSwitch) and configured VLANs 0-4094 on that port group. (This is ESXi's way of saying allow all VLANs)
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings3.png" />
+</p>
+
+Then I went into the configuration panel for the physical switch that connects all of our ESXis together. I located the specific switchports that were connected to each of the vmnic0's of the ESXi. I then configured trunking with allowed VLANs 1000-2000 on those specific switchports.
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings4.png" />
+</p>
+
+This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXis, making this configuration an ideal way to abstract the networking on the individual ESXi level.
 
 ### Final thoughts
 
-When viewing the previous RvB setup, the networking was a lot more simpler and easy to understand. VLANs made sense as well. However, when vSphere clustering and dSwitches became involved, traditional networking convention was thrown out the window. Having to understand the function of dSwitch uplinks, implemeting VLANs into vmnics and dSwitches, and how to figure out how to bridge the connection between VMware networking and physical networking was the biggest hurdle for me.
+Overall, I thought it was pretty cool and fun to figure all of this out. It was definitely a challenging project, but really helped reinforce my knowledge of VLANs as well as gain a better understanding of ESXi networking. Each new iteration of RvB networking was like a huge breakthrough for the entire RvB project.
+
+The most difficult part of this project was breaking out of my conventional understanding of networking. Things like vSwitches and dSwitches don't exactly follow the same rules that you would learn in your typical Cisco or Network+ class. So it was crucial to have an open mind and experiment with many settings as possible and read tons of documentation. Many of the procedures outlined in this post may seem like logical steps that were figured out before going through the steps, but I would say that 99% of the procedures in this post were discovered through trial and error.
