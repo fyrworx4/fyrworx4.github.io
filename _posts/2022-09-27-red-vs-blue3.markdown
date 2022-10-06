@@ -1,5 +1,5 @@
 ---
-title: Red vs. Blue - Networking and vSphere Explained
+title: Red vs. Blue - Networking Explained
 layout: post
 date: 2022-09-27 22:01
 image: /assets/images/markdown.jpg
@@ -11,17 +11,19 @@ author: taylornguyen
 description: The final boss of Red vs. BLue
 ---
 
-Hello! Welcome back to my third installment of Red vs. Blue content. This post will aim to explain the concepts and developments of the networking infrastructure behind our Red vs. Blue project. **Many of the concepts here will build off the Networking section in [my first Red vs. Blue post](https://tsnguyen.com/red-vs-blue/), so please check it out if you haven't seen it yet!**
+Hello! Welcome back to my third installment of Red vs. Blue content. This post will aim to explain the concepts and developments of the networking infrastructure behind our Red vs. Blue project.
 
 ---
 
 ### Quick refresher on Red vs. Blue
 
-Red vs. Blue (RvB) is our college organization's twist on the CCDC format. Teams of 4 are placed into a vulnerable environment and given a unique experience of troubleshooting, responding to incidents, and completing business objectives against an active red team.
+Red vs. Blue, or RvB, is our college organization's twist on the CCDC format. Teams of 4 are placed into a vulnerable environment and given a unique experience of troubleshooting, responding to incidents, and completing business objectives against an active red team.
 
-Preparation and development of an RvB-style competition involves few major steps: brainstorming the setting, creating vulnerable machines, configuring the networking, and setting up a scoring engine.
+Preparation and development of Red vs. Blue competition involves few major steps: brainstorming the setting, creating vulnerable machines, configuring the networking, and setting up a scoring engine.
 
 To read more about RvB, check out this blog by [CPP SWIFT](https://www.calpolyswift.org/blog/rvb-2022-spring).
+
+This is going to be an update to [my first RvB post](https://tsnguyen.com/red-vs-blue/), so please check my previous post out if you haven't already.
 
 ### Previous Red vs. Blue networking configuration
 
@@ -33,46 +35,31 @@ This was how RvB was previously setup. After the previous networking guy graduat
 
 We run RvB mostly off ESXi, which is a Type-1 hypervisor made by VMware. In addition to creating VMs, you can create virtual networks to connect VMs together.
 
-- VMware ESXi allows you to create **vSwitches** (virtual switches).
+- VMware ESXi allows you to create **vSwitches**, or virtual switches.
 - vSwitches operate pretty much exactly the same as physical switches.
 - vSwitches contain **port groups**, or groups of virtual ports on a vSwitch.
 
 To understand port groups a bit better, imagine you have a super huge, unconfigured virtual switch that contains an absurdly large number of ports.
 
-Chances are, you don't want all the ports to be configured exactly the same way -- you want some ports to be used by production VMs, some ports to be used by development VMs, some ports to be used by engineering VMs, etc.
+Chances are, you don't want all the ports to be configured exactly the same way -- you want some ports to be used by Production VMs, some ports to be used by Development VMs, some ports to be used by Engineering VMs, etc.
 
 We can make a port group for each of these:
-- a port group for production VMs,
-- a port group for development VMs,
-- a port group for engineering VMs,
+- a new port group for all production VMs called "Production Port Group",
+- a new port group for all development VMs called "Development Port Group",
+- a new port group for all engineering VMs called "Engineering Port Group",
 - and so on and so forth.
 
-We can then create logical rules or policies on each port group. For example, if we want to implement traffic shaping on our production VMs, we can do so by editing the traffic policies on the production VMs' port group without needing to affect the development VMs and engineering VMs.
+We can then create logical rules or policies on each port group. For example, if we want to implement traffic shaping on our production VMs, we can do so by editing the traffic policies on the production VMs' port group without affecting the development VMs and engineering VMs.
 
 ESXi port groups are a totally different concept than things like port bonding, port aggregation, etc. If you want to learn more, [this article](https://vmiss.net/vmware-vsphere-networking/) has a good read on vSphere networking.
 
 ### 1-to-1 NAT
 
-The first thing I focused on was reimplementing the 1-to-1 NAT on the pod pfSense routers. Every router needs to have some special gimmick to make it unique against other brands, so I had to consult the [pfSense documentation](https://docs.netgate.com/pfsense/en/latest/nat/1-1.html) to figure out what was going on.
+The first thing I focused on was reimplementing the 1-to-1 NAT on the pod pfSense routers. I did not know how to configure 1-to-1 NAT, so I had to consult the [pfSense documentation](https://docs.netgate.com/pfsense/en/latest/nat/1-1.html) to figure out what was going on.
 
-Anyways, the goal of 1-to-1 NAT is to get every system on each pod to be individually accessible from the core network (AKA have its own IP address in the core network subnet range).
+The goal of 1-to-1 NAT is to get every system on each pod to be individually accessible from the core network (AKA have its own IP address in the core network subnet range, which was 172.16.0.0/16).
 
 ![1-to-1 NAT](../assets/images/red-vs-blue/rvb-networking-nat.png)
-
-**Pod Router 1 NAT Mappings**
-- 192.168.1.10 --> 172.16.1.10
-- 192.168.1.11 --> 172.16.1.11
-- 192.168.1.12 --> 172.16.1.12
-
-**Pod Router 2 NAT Mappings**
-- 192.168.1.10 --> 172.16.1.10
-- 192.168.1.11 --> 172.16.1.11
-- 192.168.1.12 --> 172.16.1.12
-
-**Pod Router 3 NAT Mappings**
-- 192.168.1.10 --> 172.16.1.10
-- 192.168.1.11 --> 172.16.1.11
-- 192.168.1.12 --> 172.16.1.12
 
 After much trial and error, this was the NAT configuration that allowed us to achieve 1-to-1 NAT:
 
@@ -82,7 +69,7 @@ After much trial and error, this was the NAT configuration that allowed us to ac
   - Interface - WAN
   - Address Type - Network
   - Address(es) - 172.16.X.0/24 (X being the team number)
-- Under Firewall → NAT, create a new 1:1 mapping:
+- Under Firewall → NAT, create a new 1-to-1 mapping:
   - Interface - WAN
   - Address Family - IPv4
   - External subnet IP → WAN address
@@ -93,15 +80,72 @@ After much trial and error, this was the NAT configuration that allowed us to ac
 
 VLANs, or virtual LANs, is a feature of switches that allow you to logically separate broadcast domains on a single switch.
 
-Simply put, with a standard switch without VLANs, you can only attach one network onto that switch. If you want to have two networks, you would need two switches.
+Simply put, with a standard switch without VLANs, you can only attach one network onto that switch. If you want to have two separate networks, you would need two separate switches.
 
-With VLANs, you can attach multiple networks on a single switch.
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-no-vlan.png" />
+</p>
 
-In this example, notice how we reduced the number of switches when we implemented VLANs. If I create new VLANs, I can add many more networks onto that one single switch! That's one of the benefits of VLANs - less infrastructure overhead when creating new networks.
+Each network would need to be physicaly separated with two different physical switches. However, with VLANs, you can attach multiple, logically separateed networks on a single switch.
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan.png" />
+</p>
+
+In this example, notice how the number of switches have reduced with the implentation of VLANS. If we wanted to create a three, four, even a hundred separate networks, we can utilize VLANs to do all of that on a single switch.
+
+That's one of the benefits of VLANs - less infrastructure overhead when creating new networks, and this is the main benefit we'll focus on in this blog.
+
+Now how does this relate to vSwitches and ESXi networking? If you recall from two sections ago:
+> vSwitches operate pretty much exactly the same as physical switches.
+
+If we wanted to create separate, "physically" isolated networks on our ESXi instances, then we would need to create separate vSwitches for each network. However, ESXi comes with the amazing ability to configure VLANs on our vSwitches.
+
+If we go back to our production/development/engineering port group example, we can configure VLANs on each port group:
+- Production Port Group - VLAN 10
+- Development Port Group - VLAN 20
+- Engineering Port Group - VLAN 30
+
+And this would have the effect of isolating each port group so that the Production VMs are on a separate network from the Development VMs, the Development VMs separate from the Engineering VMs, so on and so forth.
 
 Now with VLANs in mind, let's go back to RvB networking.
 
-One of the issues with the current setup of RvB is having too many vSwitches – each pod would require its own vSwitch, which is kind of unnecessary since I would have to create an entirely new vSwitch with a new port group for each team. Our lab eventually became a mess of vSwitches and port groups, I wanted to reduce creating new vSwitches whenever possible. So I configured each RvB pod's port group to belong in a different VLAN. These VLANs only existed within the port groups - the VLANs were not configured on any physical switch or router. This would make it so that each pod is isolated into their own separate broadcast domain, but still be connected to one vSwitch. Therefore, we can still create pod networks without having to create additional vSwitches.
+If we refer back to our first RvB topology, you can see that each pod network would require its own vSwitch. The diagram only shows three pod networks, but our RvB can get upwards to 20 teams, which means having to create 20 vSwitches.
+
+This is a lot of unnecessary work and would create a mess of vSwitches and port groups in our ESXi lab.
+
+I wanted to reduce creating new vSwitches whenever possible, so here were the steps I did:
+- Remove all the unnecessary vSwitches and just make one vSwitch that will hold all of our networks.
+- Create four port groups on the single vSwitch:
+  - CoreNetwork
+  - Pod01Network
+  - Pod02Network
+  - Pod03Network
+- Configure the CoreNetwork to have VLAN 1000,
+- Configure Pod01Network to have VLAN 1001,
+- Configure Pod02Network to have VLAN 1002,
+- Configure Pod03Network to have VLAN 1003,
+- etc.
+
+To further explain how this works, let's look closely at a single pod network with our new VLAN configuration:
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan-explained1.png" />
+</p>
+
+This is what a single pod network would look like with the new VLAN configuration. If we take away the VLAN configurations but retain our same color-coding scheme, this is what the network would look like:
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan-explained2.png" />
+</p>
+
+As you can see, by "unwrapping" our VLAN configuration from our network, our topology becomes much more simplier to understand. Here's another view that shows the path of an outbound connection from Pod 1's VM to the Core Router:
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan-explained3.png" />
+</p>
+
+In other words, the interactions and communications between the VMs remain the same and networking works the same as the previous topology. However, with VLANs, we can reduce the number of vSwitches created, reducing our networking overhead on our ESXi instance.
 
 ### vSphere clustering and dSwitches
 
