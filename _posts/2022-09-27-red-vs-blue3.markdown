@@ -11,43 +11,68 @@ author: taylornguyen
 description: The final boss of Red vs. BLue
 ---
 
-Ever since we held our Red vs. Blue last semester, we've made significant changes on the way Red vs. Blue was managed - both from a techincal standpoint and a logistical standpoint.
-
-Last Red vs. Blue event acted like a dry-run for our high-school version of Red vs. Blue, where we train CyberPatriot teams for Nationals (the original purpose of Red vs. Blue).
+Hello! Welcome back to my third installment of Red vs. Blue content. This post will aim to explain the concepts and developments of the networking infrastructure behind our Red vs. Blue project. **Many of the concepts here will build off the Networking section in [my first Red vs. Blue post](https://tsnguyen.com/red-vs-blue/), so please check it out if you haven't seen it yet!**
 
 ---
 
 ### Quick refresher on Red vs. Blue
 
-Red vs. Blue (RvB) is a SWIFT-run competition that is is modeled after CCDC. A team of 4 students is placed into a vulnerable network that they have to protect. SWIFT board, alumni, and volunteers act as an active red team, trying to compromise the network and lay out persistence on as many machines as possible. This gives students a unique experience of troubleshooting and incident response in an active breach scenario.
+Red vs. Blue (RvB) is our college organization's twist on the CCDC format. Teams of 4 are placed into a vulnerable environment and given a unique experience of troubleshooting, responding to incidents, and completing business objectives against an active red team.
 
 Preparation and development of an RvB-style competition involves few major steps: brainstorming the setting, creating vulnerable machines, configuring the networking, and setting up a scoring engine.
 
 To read more about RvB, check out this blog by [CPP SWIFT](https://www.calpolyswift.org/blog/rvb-2022-spring).
 
-### Goals of this post
-
-This is not really meant to provide a techincal guidance or step-by-step on how to configure networking for an RvB-style setup. I will explain some techincal terms here and there, but this is mainly to show how the networking for RvB has changed over the years, discuss about the thought process behind each iteration, and provide additional insights to help the reader better understand the inner mechanisms of RvB networking.
-
 ### Previous Red vs. Blue networking configuration
 
-This was how RvB was previously setup. After the previous networking guy left, this was basically what I was left with in terms of documentation.
+This was how RvB was previously setup. After the previous networking guy graduated, this was basically what I was left with in terms of documentation.
 
-### Primer to ESXi networking terms
+![Topology](../assets/images/red-vs-blue/RvB-Topology.png)
 
-We run RvB mostly off ESXi, which is a Type-1 hypervisor by VMware. ESXi has the ability to create virtual switches, or vSwitches. vSwitches operate pretty much exactly the same as physical switches.
+### Primer to ESXi and vSphere networking
 
-vSwitches contain port groups. I like to think of port groups as "labels" for the virtual ports on the vSwitch.
+We run RvB mostly off ESXi, which is a Type-1 hypervisor made by VMware. In addition to creating VMs, you can create virtual networks to connect VMs together.
 
-If you create two port groups on a single vSwitch and connect VMs to both of those port groups, it would operate the same as connecting computers to different physical switchports on a single physical switch.
+- VMware ESXi allows you to create **vSwitches** (virtual switches).
+- vSwitches operate pretty much exactly the same as physical switches.
+- vSwitches contain **port groups**, or groups of virtual ports on a vSwitch.
 
-You can also configure VLANs and other networking metrics on individual port groups. I will touch more on this topic later in this blog post.
+To understand port groups a bit better, imagine you have a super huge, unconfigured virtual switch that contains an absurdly large number of ports.
 
-(Not to be mistakened with switching features like LACP or port bonding)
+Chances are, you don't want all the ports to be configured exactly the same way -- you want some ports to be used by production VMs, some ports to be used by development VMs, some ports to be used by engineering VMs, etc.
+
+We can make a port group for each of these:
+- a port group for production VMs,
+- a port group for development VMs,
+- a port group for engineering VMs,
+- and so on and so forth.
+
+We can then create logical rules or policies on each port group. For example, if we want to implement traffic shaping on our production VMs, we can do so by editing the traffic policies on the production VMs' port group without needing to affect the development VMs and engineering VMs.
+
+ESXi port groups are a totally different concept than things like port bonding, port aggregation, etc. If you want to learn more, [this article](https://vmiss.net/vmware-vsphere-networking/) has a good read on vSphere networking.
 
 ### 1-to-1 NAT
 
-The first thing I focused on was reimplementing the 1-to-1 NAT between the pod networks and the core networks. Every system on each pod needed to be individually accessible from the core network (AKA have its own IP address in the core network subnet range).
+The first thing I focused on was reimplementing the 1-to-1 NAT on the pod pfSense routers. Every router needs to have some special gimmick to make it unique against other brands, so I had to consult the [pfSense documentation](https://docs.netgate.com/pfsense/en/latest/nat/1-1.html) to figure out what was going on.
+
+Anyways, the goal of 1-to-1 NAT is to get every system on each pod to be individually accessible from the core network (AKA have its own IP address in the core network subnet range).
+
+![1-to-1 NAT](../assets/images/red-vs-blue/rvb-networking-nat.png)
+
+**Pod Router 1 NAT Mappings**
+- 192.168.1.10 --> 172.16.1.10
+- 192.168.1.11 --> 172.16.1.11
+- 192.168.1.12 --> 172.16.1.12
+
+**Pod Router 2 NAT Mappings**
+- 192.168.1.10 --> 172.16.1.10
+- 192.168.1.11 --> 172.16.1.11
+- 192.168.1.12 --> 172.16.1.12
+
+**Pod Router 3 NAT Mappings**
+- 192.168.1.10 --> 172.16.1.10
+- 192.168.1.11 --> 172.16.1.11
+- 192.168.1.12 --> 172.16.1.12
 
 After much trial and error, this was the NAT configuration that allowed us to achieve 1-to-1 NAT:
 

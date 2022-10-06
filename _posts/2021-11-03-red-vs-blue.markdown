@@ -32,7 +32,7 @@ My good friend Alex pitched a Star Wars themed idea, which we all enjoyed, so we
 ### Networking
 The networking for Red vs. Blue had undergone tons of development in short, this is what the topology looked like:
 
-![Topology](../assets/images/RvB-Topology.png)
+![Topology](../assets/images/red-vs-blue/RvB-Topology.png)
 
 Each blue-team environment is called a **pod**. Each pod was connected to a pfSense router called a **pod router**, and the pod routers were connected together by another pfSense router called the **core router**.
 
