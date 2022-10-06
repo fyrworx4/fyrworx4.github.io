@@ -127,6 +127,8 @@ I wanted to reduce creating new vSwitches whenever possible, so here were the st
 - Configure Pod03Network to have VLAN 1003,
 - etc.
 
+(by the way, I did not need to configure these VLANs with these exact VLAN IDs. I could have made CoreNetwork to be VLAN 50 and Pod01Network to be VLAN 635 and this would still operate the same)
+
 To further explain how this works, let's look closely at a single pod network with our new VLAN configuration:
 
 <p align="center">
@@ -149,9 +151,13 @@ In other words, the interactions and communications between the VMs remain the s
 
 ### vSphere clustering and dSwitches
 
-We also had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff. However, instead of using vSwitches, we had to use distributed switches, or dSwitches for short. vSwitches and dSwitches do pretty much the same thing, except vSwitches are unique per ESXi, while dSwitches exist for all ESXi's in a cluster.
+We also had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff. However, instead of using vSwitches, we had to use distributed switches, or dSwitches for short.
 
-I like to draw dSwitches as a very wide switch.
+vSwitches and dSwitches do pretty much the same thing, except vSwitches are unique per ESXi, while dSwitches exist for all ESXi's in a cluster.
+
+The way that I visualize dSwitches is as a very wide switch that spans across all of our ESXi machines:
+
+
 
 When we configured dSwitches initially, we were prompted for many other options, like uplinks, which I wasn't really familiar with so I just skipped those steps. After creating our dSwitch and our port groups with unique VLAN IDs, we ran into another issue. The issue was that machines on different ESXi's weren't able to communicate with each other. After much troubleshooting, I figured out that the issue was because the dSwitches weren't configured with uplinks. Uplinks allowed the dSwitch to operate across multiple ESXis. Without the uplink, the dSwitch would still exist across the ESXis (you can still add port groups and connect VMs to those port groups) but each ESXi would treat the dSwitch as their own local vSwitch. This means that VMs on the same ESXi on the same dSwitch can communicate with each other, but VMs on different ESXis but on the same dSwitch can't communicate with each other.
 
