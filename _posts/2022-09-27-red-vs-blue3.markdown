@@ -11,7 +11,7 @@ author: taylornguyen
 description: The final boss of Red vs. BLue
 ---
 
-Hello! Welcome back to my third installment of Red vs. Blue content. This post will aim to explain the concepts and developments of the networking infrastructure behind our Red vs. Blue project.
+Hello! Welcome to my third installment of Red vs. Blue content. This post will aim to explain the concepts and developments of the networking infrastructure behind our Red vs. Blue project.
 
 ---
 
@@ -23,7 +23,7 @@ Preparation and development of Red vs. Blue competition involves few major steps
 
 To read more about RvB, check out this blog by [CPP SWIFT](https://www.calpolyswift.org/blog/rvb-2022-spring).
 
-This is going to be an update to [my first RvB post](https://tsnguyen.com/red-vs-blue/) and [my second RvB post](https://tsnguyen.com/red-vs-blue2/), so please check my previous post out if you haven't already.
+This post builds off of [my first RvB post](https://tsnguyen.com/red-vs-blue/) and [my second RvB post](https://tsnguyen.com/red-vs-blue2/), so please check those out if you haven't already.
 
 ### Previous Red vs. Blue networking configuration
 
@@ -110,10 +110,10 @@ In this example, notice how the number of switches have reduced with the implent
 
 That's one of the benefits of VLANs - less infrastructure overhead when creating new networks, and this is the main benefit we'll focus on in this blog.
 
-Now how does this relate to vSwitches and ESXi networking? If you recall from two sections ago:
+Now, how does this relate to vSwitches and ESXi networking? If you recall from in the beginning of the post:
 > vSwitches operate pretty much exactly the same as physical switches.
 
-If we wanted to create separate, "physically" isolated networks on our ESXi instances, then we would need to create separate vSwitches for each network. However, ESXi comes with the amazing ability to configure VLANs on our vSwitches.
+If we wanted to create separate, isolated networks on our ESXi instances, then we would need to create separate vSwitches for each network. However, ESXi comes with the amazing ability to configure VLANs on our vSwitches. This means that we can create several separate networks without needing to make new vSwitches. 
 
 If we go back to our production/development/engineering port group example, we can configure VLANs on each port group:
 - Production Port Group - VLAN 10
@@ -155,7 +155,7 @@ This is what a single pod network would look like with the new VLAN configuratio
   <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan-explained2.png" />
 </p>
 
-As you can see, by "unwrapping" our VLAN configuration from our network, our topology becomes much more simplier to understand. Here's another view that shows the path of an outbound connection from Pod 1's VM to the Core Router:
+As you can see, by "unwrapping" our VLAN configuration from our network, our topology becomes much easier to understand. Here's another view that shows the path of an outbound connection from Pod 1's VM to the Core Router:
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan-explained3.png" />
@@ -165,13 +165,13 @@ In other words, the interactions and communications between the VMs remain the s
 
 ### vSphere distributed switches
 
-We also had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff.
+Sometime later, we had an upgrade to our lab - instead of having individuals ESXi machines, we created an ESXi cluster with vMotion and iSCSI configured to allow for load balancing and other cool VM stuff.
 
 However, now with a vSphere cluster instead of individual ESXis, we had to use distributed switches, or dSwitches for short.
 
-vSwitches and dSwitches do pretty much the same thing, except vSwitches are unique per ESXi, while dSwitches exist for all ESXi's in a cluster.
+vSwitches and dSwitches do pretty much the same thing, except vSwitches are unique per ESXi, while dSwitches exist for all ESXis in a cluster.
 
-The way that I visualize dSwitches is as a very wide switch that spans across all of our ESXi machines:
+The way that I like to visualize dSwitches is as a very wide switch that spans across all of our ESXi machines:
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-dswitch.png" />
@@ -227,7 +227,7 @@ Then I went into the configuration panel for the physical switch that connects a
   <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings4.png" />
 </p>
 
-This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXis, making this configuration an ideal way to abstract the networking on the individual ESXi level.
+This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXis, making this configuration an ideal way to create a layer of abstraction from networking at the individual ESXi. In other words, we don't need to worry about VMs being on different ESXis.
 
 ### Final thoughts
 
