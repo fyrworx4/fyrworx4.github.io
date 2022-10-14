@@ -229,7 +229,13 @@ Then I went into the configuration panel for the physical switch that connects a
 
 This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXis, making this configuration an ideal way to create a layer of abstraction from networking at the individual ESXi. In other words, we don't need to worry about VMs being on different ESXis.
 
-### Final thoughts
+### Final topology
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-final.png" />
+</p>
+
+### Extra thoughts
 
 Overall, I thought it was pretty cool and fun to figure all of this out. It was definitely a challenging project, but really helped reinforce my knowledge of VLANs as well as gain a better understanding of ESXi networking. Each new iteration of RvB networking was like a huge breakthrough for the entire RvB project.
 
