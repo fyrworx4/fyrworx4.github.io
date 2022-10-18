@@ -229,14 +229,33 @@ Then I went into the configuration panel for the physical switch that connects a
 
 This would allow a user to create a port group with a unique VLAN ID, and be able to have VMs on that port group communicate with each other regardless of which ESXi the VM belonged on. Things like creating VMs, vMotion, and load balancing cause VMs to be automatically placed and migrated in different ESXis, making this configuration an ideal way to create a layer of abstraction from networking at the individual ESXi. In other words, we don't need to worry about VMs being on different ESXis.
 
+If we took a look at what the topology would look like now, it would look something like this:
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-topo.png" />
+</p>
+
+And if PC-A wants to communicate with PC-B, the flow of the traffic would be as such:
+
+<p align="center">
+  <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-flow.png" />
+</p>
+
+
 ### Final topology
+
+Now with everything in place, let's see what our RvB topology looks like now.
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-final.png" />
 </p>
 
+All of the VMs are spread evenly throughout the ESXis to simulate load balancing and automatically migrating VMs across multiple hosts.
+
 ### Extra thoughts
 
 Overall, I thought it was pretty cool and fun to figure all of this out. It was definitely a challenging project, but really helped reinforce my knowledge of VLANs as well as gain a better understanding of ESXi networking. Each new iteration of RvB networking was like a huge breakthrough for the entire RvB project.
 
-The most difficult part of this project was breaking out of my conventional understanding of networking. Things like vSwitches and dSwitches don't exactly follow the same rules that you would learn in your typical Cisco or Network+ class. So it was crucial to have an open mind and experiment with many settings as possible and read tons of documentation. Many of the procedures outlined in this post may seem like logical steps that were figured out before going through the steps, but I would say that 99% of the procedures in this post were discovered through trial and error.
+The most difficult part of this project was breaking out of my conventional understanding of networking. Things like vSwitches and dSwitches don't exactly follow the same rules that you would learn in your typical Cisco or Network+ class. So it was crucial to have an open mind and experiment with many settings as possible and read tons of documentation. Many of the procedures outlined in this post may seem like logical steps that were figured out before performing the actions, but in reality, this was not the case. I would say that 99% of the procedures in this post were discovered through trial and error.
+
+I would also argue that we've reached the limits of optimizing RvB networking from an architectural standpoint within the confines of traditional networking. I don't think there is much else to configure on the swiches or routers to make RvB networking, but maybe this opens up the possibility of incorporating software-defined networking (SDN) into RvB as the logical next step.
