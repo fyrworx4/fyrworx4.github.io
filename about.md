@@ -12,4 +12,6 @@ development. I also have experience in computer networking, security engineering
 <p>This page will contain blog posts on my learning expeiences, both techincal and personal. I hope that 
 you take something away from my posts!</p>
 
+<p>Link to [personal notes](https://da.gd/Q3WL).</p>
+
 <p>- Taylor</p>
