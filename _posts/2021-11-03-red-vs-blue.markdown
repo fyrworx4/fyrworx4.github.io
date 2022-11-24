@@ -53,7 +53,7 @@ Another good friend of mine, Gabe, led the creation of vulnerable and misconfigu
 Each machine contains services that were scored for uptime. We did our best to fit the environment with our theme, but it is still funny to imagine a futuristic Star Wars ship run a mail server in the engines.
 
 ### Scoring engine
-The scoring engine, built from Python, scores service uptime by simulting users accessing business-critical services, such as using SSH to remotely log into an SSH server or initiating a RDP authentication request to an RDP server. [Here’s the repo.](https://github.com/fyrworx4/PulseEngine-ScoringEngine)
+The scoring engine, built from Python, scores service uptime by simulating users accessing business-critical services, such as using SSH to remotely log into an SSH server or initiating a RDP authentication request to an RDP server. [Here’s the repo.](https://github.com/fyrworx4/PulseEngine-ScoringEngine)
 
 There were two components to the scoring engine - the user web interface and the pollers. Credits to Nathan and Silas for building/developing the user web interface (which you can access by going here). I worked with Gabe and a CCDC team member, Jacob, to add more capabilities to the scoring engine, such as scoring a MySQL and IRC server.
 
