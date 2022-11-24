@@ -58,7 +58,7 @@ The scoring engine, built from Python, scores service uptime by simulating users
 There were two components to the scoring engine - the user web interface and the pollers. Credits to Nathan and Silas for building/developing the user web interface (which you can access by going here). I worked with Gabe and a CCDC team member, Jacob, to add more capabilities to the scoring engine, such as scoring a MySQL and IRC server.
 
 ### The competition
-Setting up the environment was a project of its own, but the logitstics of how the event is run needs to be planned. We needed to answer questions such as:
+Setting up the environment was a project of its own, but the logistics of how the event is run needs to be planned. We needed to answer questions such as:
 
 - How are teams created? How will teams communicate?
 - How difficult should the competition be?

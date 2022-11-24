@@ -100,13 +100,13 @@ Simply put, with a standard switch without VLANs, you can only attach one networ
   <img src="../assets/images/red-vs-blue/rvb-networking-no-vlan.png" />
 </p>
 
-Each network would need to be physicaly separated with two different physical switches. However, with VLANs, you can attach multiple, logically separated networks on a single switch.
+Each network would need to be physically separated with two different physical switches. However, with VLANs, you can attach multiple, logically separated networks on a single switch.
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-with-vlan.png" />
 </p>
 
-In this example, notice how the number of switches have reduced with the implentation of VLANS. If we wanted to create a three, four, even a hundred separate networks, we can utilize VLANs to do all of that on a single switch.
+In this example, notice how the number of switches have reduced with the implementation of VLANS. If we wanted to create a three, four, even a hundred separate networks, we can utilize VLANs to do all of that on a single switch.
 
 That's one of the benefits of VLANs - less infrastructure overhead when creating new networks, and this is the main benefit we'll focus on in this blog.
 
@@ -181,7 +181,7 @@ When we configured dSwitches initially, we were prompted for many other options 
 
 After creating our dSwitch and configuring our port groups with VLANs similar to what we had above, we expected the networking to work.
 
-However, this wasn't the case. We had an issue -- machines on different ESXis were not able to communicate with each other. This was a huge issue because even though we had clustering enabled, each VM was still "techincally" part of an individual ESXi for things like compute power. Also, when creating or cloning VMs, the VM's host ESXi would automatically be chosen.
+However, this wasn't the case. We had an issue -- machines on different ESXis were not able to communicate with each other. This was a huge issue because even though we had clustering enabled, each VM was still "technically" part of an individual ESXi for things like compute power. Also, when creating or cloning VMs, the VM's host ESXi would automatically be chosen.
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-issue.png" />
@@ -209,7 +209,7 @@ First, I created a new dSwitch with 1 uplink. This setting refers to the number 
   <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings.png" />
 </p>
 
-Then I clicked on the "Add and Manage Hosts" setting for the dSwitch, selected all my ESXi hosts to add to the dSwitch, and designated vmnic0 of all my ESXisto be attached to the dSwitch uplinks. After this step, there were extra settings for VMkernels and all that jazz but that's outside the scope of this post.
+Then I clicked on the "Add and Manage Hosts" setting for the dSwitch, selected all my ESXi hosts to add to the dSwitch, and designated vmnic0 of all my ESXis to be attached to the dSwitch uplinks. After this step, there were extra settings for VMkernels and all that jazz but that's outside the scope of this post.
 
 <p align="center">
   <img src="../assets/images/red-vs-blue/rvb-networking-dswitch-settings2.png" />
@@ -258,4 +258,4 @@ Overall, I thought it was pretty cool and fun to figure all of this out. It was 
 
 The most difficult part of this project was breaking out of my conventional understanding of networking. Things like vSwitches and dSwitches don't exactly follow the same rules that you would learn in your typical Cisco or Network+ class. So it was crucial to have an open mind and experiment with many settings as possible and read tons of documentation. Many of the procedures outlined in this post may seem like logical steps that were figured out before performing the actions, but in reality, this was not the case. I would say that 99% of the procedures in this post were discovered through trial and error.
 
-I would also argue that we've reached the limits of optimizing RvB networking from an architectural standpoint within the confines of traditional networking. I don't think there is much else to configure on the swiches or routers to make RvB networking, but maybe this opens up the possibility of incorporating software-defined networking (SDN) into RvB as the logical next step.
+I would also argue that we've reached the limits of optimizing RvB networking from an architectural standpoint within the confines of traditional networking. I don't think there is much else to configure on the switches or routers to make RvB networking, but maybe this opens up the possibility of incorporating software-defined networking (SDN) into RvB as the logical next step.
