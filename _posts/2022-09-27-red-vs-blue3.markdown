@@ -55,7 +55,7 @@ We can also create logical rules or policies on each port group. For example, if
 
 ESXi port groups are a totally different concept than things like port bonding, port aggregation, etc. If you want to learn more, [this article](https://vmiss.net/vmware-vsphere-networking/) has a good read on vSphere networking.
 
-Another term we must talk about are the actual ethernet ports of the ESXi servers (which were PowerEdges). The physical, ethernet ports of the ESXis are referred to as "vmnics". Each vmnic port has its own ID, starting from zero. So if we had four ethernet ports, our vmnics would be as follows:
+We must also talk about vmnics. Each of the PowerEdge servers that we were running contained four Ethernet interfaces, which were referred to as "vmnics" in ESXi. Each vmnic interface has its own ID, starting from zero. So if we had four Ethernet interfaces, our vmnics would be labeled as follows:
 - vmnic0
 - vmnic1
 - vmnic2
@@ -65,7 +65,7 @@ Another term we must talk about are the actual ethernet ports of the ESXi server
   <img src="../assets/images/red-vs-blue/rvb-networking-vmnic.png" />
 </p>
 
-(literally, those ethernet ports are called vmnics in ESXi language)
+(The Ethernet interfaces illustrated above are called "vmnics" in ESXi language)
 
 ### 1-to-1 NAT
 
