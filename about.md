@@ -4,7 +4,7 @@ layout: page
 ---
 ![Profile Image]({% if site.external-image %}{{ site.picture }}{% else %}{{ site.url }}/{{ site.picture }}{% endif %})
 
-Hello! My name is Taylor. I'm currently working as an Associated Red Team Consultant at CrowdStrike.
+Hello! My name is Taylor. I'm currently working as an Associate Red Team Consultant at CrowdStrike.
 
 I studied at Cal Poly Pomona from 2019 to 2023, where I was part of a club called [SWIFT](https://www.calpolyswift.org/) and also competed in CCDC and CPTC through [CPP Cyber](https://cysec.team/).
 
