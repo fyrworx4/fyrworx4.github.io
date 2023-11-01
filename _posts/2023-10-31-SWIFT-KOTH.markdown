@@ -17,6 +17,7 @@ During October, I saw that SWIFT was hosting a competition called King of the Hi
   <img src="../assets/images/koth/jakekim.jpg" width="50%"/>
 </p>
 
+---
 
 # What is King of The Hill?
 
@@ -45,7 +46,7 @@ Once the competition environment opened, I saw that half of the machines in the 
 
 However, there was also a flag that was stored on the web server at `/flag`. I thought the flag would be a simple file on disk to edit, but it turns out that DotNetNuke stores that kind of data in a MSSQL server. What I ended up doing was enabling and connecting to the machine via RDP, authenticating locally to MSSQL server through cleartext creds that were discovered in a `web.config` file, creating a new user on DotNetNuke web page, and then making my newly-created user a "super user", which allowed my user to make changes on the website. Once I did that, I was able to log into the DotNetNuke admin interface and edit the `/flag` web page through the web browser.
 
-# The Battle over Missile
+# The Battle over the Missile
 
 Once the Windows box was locked down, I moved onto a Linux box called "Missile". This contained a Python Flask application with a Werkzeug debug page that allowed for Python code execution. This allowed us to obtain a reverse shell onto the machine as an unprivileged user, which contained a flag within its home directory. I was not able to get root but I was able to modify this user's flag, which allowed us to get some points from the machine. It turns out that Teams 4 and 12 were getting onto this machine as well and were modifying the flag, so it kind of became a battleground between the 3 teams. I don't think they were able to get root either, since most of the activity was from the unprivileged user. I didn't see much action from Team 4 but Team 12 was noisy as heck. They made a function that would run a file called `.bashrci` in the scoring user's home directory every 0.00005 seconds. This `.bashrci` file was a simple Bash script that echoed their team number into the flag. I was only able to discover this by running [pspy](https://github.com/DominicBreuker/pspy).
 
@@ -72,19 +73,17 @@ Overall I think the event was OK. The core gameplay worked and scoring worked fo
 
 Still I need to give credit where credit is due. Major props to the entire dev team for making this event possible. I've heard that the servers and infrastructure that was hosting the game went kablooey, ending up in some all-nighters to fix the environment. The machines were also created by students learning about cyber, so honestly it's kind of expected that the game will run into lots of issues, but I still think it's a good experience for both the dev team and the competitors.
 
-One of the biggest issues I had was the lack of testing and quality assurance. For the DotNetNuke box, I felt like the assumed path for the web flag seemed to be simply editing a file on disk somewhere within the webroot, but in actuality the contents were stored in the MSSQL database and the way to edit that was way more convoluted. Seeing how this competition was mostly targeted towards beginners, I don't think this was the intended path to control the web flag, and with some QA I think this issue should have been spotted.
+One of the biggest issues I had was the lack of testing and quality assurance. For the DotNetNuke box, I felt like the assumed path for the web flag seemed to be simply editing a file on disk somewhere within the webroot, but in actuality the contents were stored in the MSSQL database and the way to edit that was way more convoluted. Seeing how this competition was mostly targeted towards beginners, I don't think this was the intended path to control the web flag. Furthermore, my Kali VM was connected to the environment's network through VPN, and my IP kept changing every few minutes. It was impossible to set up a C2 because of that.
 
-Furthermore, my Kali VM was connected to the environment's network through VPN, and my IP kept changing every few minutes. It was impossible to set up a C2 because of that. Once again I think this issue should have been spotted with some QA.
+Besides the technical issues, given the nature of this game, it's definitely more geared towards intermediate players who have enough technical ability to plan strategy and actually play the game as it was intended. I think the majority of the players had very little experience in cyber. I can see how it can be a bit unfair for a team full of CyberPatriot 1st place champions to go against students that are new to Linux.
 
-Besides the technical issues, given the nature of this game, it's definitely more geared towards intermediate players who have enough technical ability to plan strategy and actually play the game as it was intended. I think the majority of the players had very little experience in cyber. I heard that there was a team that tried to run ufw on their Kali machines, not knowing that it did nothing against the target machines.
-
-As for my buddies on my team, it was definitely very tough to explain my methodologies and strategy since they were new to things like port scanning and services. I did my best and tried to walk them through the DotNetNuke attack path, from initial access to `SYSTEM`, along with creating a new admin user as persistence, but it's hard to say if the understanding went through.
+As for my buddies on my team, it was definitely very tough to explain my methodologies and strategy since they were new to things like port scanning and externally-facing services. I did my best and tried to walk them through the DotNetNuke attack path, from initial access to `SYSTEM`, along with creating a new admin user as persistence, but it's hard to say if the understanding went through.
 
 At the end of the day it's a skill issue.
 
 I think there has to be some rules to give those newer players at least a chance against the machines. TryHackMe has a KotH game and in this [blog post](https://tryhackme.com/r/resources/blog/guide-to-king-of-the-hill) they explain the rules pretty well. One of the things the blog mentions is that "its not a fight if there is no one in the ring". Things like aggressive firewalling, completely patching up systems, abusing killing sessions, etc. should probably not be allowed since it completely destroys the chance that another team can get onto the system.
 
-When I was doing chest day with Palmer, an eboard member who is also super buff, we chatted about KoTH and he mentioned having two separate brackets for competitors, which I think can be interesting. The issues with completely locking down systems still exists. If a team manages to get root first, they can instantly disable all initial access vectors and completely own that box, preventing other players from even touching that box.
+When I was doing chest day with Palmer, a SWIFT eboard member who is also a very buff dude, we chatted about KoTH and he mentioned having two separate brackets for competitors, which I think can be interesting. It can make for a more even-level playing field, since the greener folks don't have to worry about an instant lockdown of boxes. However, in the upper bracket, the issues with completely locking down systems still exists. If a team manages to get root first, they can instantly disable all initial access vectors and completely own that box, preventing other players from even touching that box.
 
 One suggestion I have is disabling access to root or `SYSTEM` entirely from all of the machines. This was the situation that Team 12 and my team were in on the Linux machine, where we didn't have the permissions to enable firewalls or disable services, but still had some leverage over the machine to modify flags and monitor processes. We had to resort to really cheeky and creative ways to control the flags and prevent others from capturing our flags. I think this made for a really interesting battleground and definitely was the better part of the competition. The machines can have another unprivileged user with a "root" flag to simulate some sort of privilege escalation.
 
@@ -98,6 +97,8 @@ While lots of the trivia can be learned through things like HackTheBox or TryHac
 
 The way I practiced was doing research on persistence techniques and trying out those different techniques on a homelab of sorts. I had spun up a Windows Server 2019, an Ubuntu 20.04, and a Kali machine. Each time I would test out a technique, I would evaluate what sort of impact on the system it had, what permissions it required, if it made it harder for other players to do stuff on the machine, etc.
 
-I think this is a really good practice method. The cycle of doing your own research, trying out a specific technique, looking at the results, and evaluating whether this is a good strategy or not forces you to set up an environment, come up with new ideas, troubleshoot, and document your findings, something that things like TryHackMe can't offer. I mean this is literally how top teams prep for competitions like CCDC and CPTC.
+I think this is a really good practice method. The cycle of doing your own research, trying out a specific technique, looking at the results, and evaluating whether this is a good strategy or not forces you to set up an environment, come up with new ideas, troubleshoot, and document your findings, something that resources like TryHackMe can't offer. I mean this is literally how top teams prep for competitions like CCDC and CPTC. Yeah, there's definitely a good amount of knowledge required to figure out what to research in the first place, but this high learning curve and immense dedication to the grind is what **separates the good from the exceptional**.
 
-If Team 4 plays again in the next KoTH, I will probably share my checklist with them to try to defeat Team 12.
+Do difficult things and make deliberate efforts to learn. You will be surprised on how much you can accomplish.
+
+(If Team 4 decides to participate in the next KoTH I would be down to join forces with them to defeat Team 12)
