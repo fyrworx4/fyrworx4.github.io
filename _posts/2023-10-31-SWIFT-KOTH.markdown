@@ -53,7 +53,7 @@ Once the Windows box was locked down, I moved onto a Linux box called "Missile".
   <img src="../assets/images/koth/pspy.png" />
 </p>
 
-It was a bit excessive in terms of hardening the machine, but it was kind of funny to see and definitely a creative way to ensure flag persistence. I had removed this `.bashrci` file several times, and Team 12 would keep replacing the `.bashrci` file every few minutes or so. I don't know if Team 12 was a scheduled script but it had meant I had to continuously monitor this box and this flag. However, I had my own sneaky ways of writing into this flag file, which allowed our team to get the majority of this flag's points.
+It was a bit excessive in terms of hardening the machine, but it was kind of funny to see and definitely a creative way to ensure flag persistence. I had removed this `.bashrci` file several times, and Team 12 would keep replacing the `.bashrci` file every few minutes or so. I don't know if Team 12 had a scheduled script but it had meant I had to continuously monitor this box and this flag. However, I had my own sneaky ways of writing into this flag file, which allowed our team to get the majority of this flag's points.
 
 I didn't focus on the rest of the machines, either since they were locked down by either Team 4 or 12, and that I was too lazy to focus on the other machines.
 
