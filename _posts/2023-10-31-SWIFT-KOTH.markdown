@@ -99,3 +99,5 @@ While lots of the trivia can be learned through things like HackTheBox or TryHac
 The way I practiced was doing research on persistence techniques and trying out those different techniques on a homelab of sorts. I had spun up a Windows Server 2019, an Ubuntu 20.04, and a Kali machine. Each time I would test out a technique, I would evaluate what sort of impact on the system it had, what permissions it required, if it made it harder for other players to do stuff on the machine, etc.
 
 I think this is a really good practice method. The cycle of doing your own research, trying out a specific technique, looking at the results, and evaluating whether this is a good strategy or not forces you to set up an environment, come up with new ideas, troubleshoot, and document your findings, something that things like TryHackMe can't offer. I mean this is literally how top teams prep for competitions like CCDC and CPTC.
+
+If Team 4 plays again in the next KoTH, I will probably share my checklist with them to try to defeat Team 12.
