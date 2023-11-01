@@ -8,12 +8,15 @@ tag:
 - competitions
 category: blog
 author: taylornguyen
-description: SDFLJFL
+description: This was a Big Deal
 ---
 
 During October, I saw that SWIFT was hosting a competition called King of the Hill, or KoTH for short. I decided to join in with a few buddies of mine with an alias of Jake Kim from Lookism. It was very interesting; here are my experiences.
 
-![jakekim](../assets/images/koth/jakekim.jpg)
+<p align="center">
+  <img src="../assets/images/koth/jakekim.jpg" width="50%"/>
+</p>
+
 
 # What is King of The Hill?
 
@@ -46,7 +49,9 @@ However, there was also a flag that was stored on the web server at `/flag`. I t
 
 Once the Windows box was locked down, I moved onto a Linux box called "Missile". This contained a Python Flask application with a Werkzeug debug page that allowed for Python code execution. This allowed us to obtain a reverse shell onto the machine as an unprivileged user, which contained a flag within its home directory. I was not able to get root but I was able to modify this user's flag, which allowed us to get some points from the machine. It turns out that Teams 4 and 12 were getting onto this machine as well and were modifying the flag, so it kind of became a battleground between the 3 teams. I don't think they were able to get root either, since most of the activity was from the unprivileged user. I didn't see much action from Team 4 but Team 12 was noisy as heck. They made a function that would run a file called `.bashrci` in the scoring user's home directory every 0.00005 seconds. This `.bashrci` file was a simple Bash script that echoed their team number into the flag. I was only able to discover this by running [pspy](https://github.com/DominicBreuker/pspy).
 
-![pspy](../assets/images/koth/pspy.png)
+<p align="center">
+  <img src="../assets/images/koth/pspy.png" />
+</p>
 
 It was a bit excessive in terms of hardening the machine, but it was kind of funny to see and definitely a creative way to ensure flag persistence. I had removed this `.bashrci` file several times, and Team 12 would keep replacing the `.bashrci` file every few minutes or so. I don't know if Team 12 was a scheduled script but it had meant I had to continuously monitor this box and this flag. However, I had my own sneaky ways of writing into this flag file, which allowed our team to get the majority of this flag's points.
 
@@ -56,7 +61,10 @@ I didn't focus on the rest of the machines, either since they were locked down b
 
 Team 12 won by a huge margin with 6990 points. Not going to lie, they were definitely prepared (they had obtained several flags within about 30 seconds into the competition) so it was pretty clear who the victor was. Team 4 came in at second place with 4640 points, and Team 5 (our team) came in at a solid third place with 3450 points. The score distribution drops down pretty heavily for the other teams, with most teams scoring under 300 points. Below is a screenshot from the first place winner, hence the red box.
 
-![scoreboard](../assets/images/koth/scoreboard.jpg)
+<p align="center">
+  <img src="../assets/images/koth/scoreboard.jpg" />
+</p>
+
 
 # Lessons Learned and Feedback
 
@@ -86,7 +94,7 @@ I mean this is a little bit tough from a beginner's standpoint since it assumes 
 
 You also have to do these things very, very quickly.
 
-While lots of the trivia can be learned through things like HackTheBox or TryHackMe, situational awareness and troubleshooting are tough to learn. For example, when do I know when to run a gobuster scan? Or when do I know when to run Juicy Potato exploits to gain SYSTEM? It all comes down to 1) what your current access is, 2) what information/access you are trying to gain, and 3) what things can you run with your current access. This is something you mainly only gain from continuous exposure to situations where your decision-making abilities are tested. With intentional and mindful practice, your decision-making skills will improve and your intuition will expand over time. You will eventually get to a point where you will be comfortable with solving difficult problems.
+While lots of the trivia can be learned through things like HackTheBox or TryHackMe, situational awareness and troubleshooting are tough to learn. For example, when do I know when to run a `gobuster` scan? Or when do I know when to run Juicy Potato exploits to gain SYSTEM? It all comes down to 1) what your current access is, 2) what information/access you are trying to gain, and 3) what things can you run with your current access. This is something you mainly only gain from continuous exposure to situations where your decision-making abilities are tested. With intentional and mindful practice, your decision-making skills will improve and your intuition will expand over time. You will eventually get to a point where you will be comfortable with solving difficult problems.
 
 The way I practiced was doing research on persistence techniques and trying out those different techniques on a homelab of sorts. I had spun up a Windows Server 2019, an Ubuntu 20.04, and a Kali machine. Each time I would test out a technique, I would evaluate what sort of impact on the system it had, what permissions it required, if it made it harder for other players to do stuff on the machine, etc.
 
