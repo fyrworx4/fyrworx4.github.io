@@ -4,7 +4,7 @@ layout: page
 ---
 
 <p align="center">
-  <img src="../assets/images/profile-morefull.jpg" width="50%"/>
+  <img src="../assets/images/profile.jpg" width="50%"/>
 </p>
 
 Hello! My name is Taylor. I do offensive security work during the day but I'm also an avid gym-goer and average coffee enthusiast.
