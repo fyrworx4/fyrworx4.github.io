@@ -1,5 +1,5 @@
 ---
-title: My Thoughts On Learning Cyber
+title: How To Learn Cybersecurity
 layout: post
 date: 2023-08-18 19:00
 image: /assets/images/markdown.jpg

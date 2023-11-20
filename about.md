@@ -2,13 +2,16 @@
 title: About
 layout: page
 ---
-![Profile Image]({% if site.external-image %}{{ site.picture }}{% else %}{{ site.url }}/{{ site.picture }}{% endif %})
 
-Hello! My name is Taylor. I'm currently working as a red team consultant. And I like gymming.
+<p align="center">
+  <img src="../assets/images/profile-morefull.jpg" width="50%"/>
+</p>
+
+Hello! My name is Taylor. I do offensive security work during the day but I'm also an avid gym-goer and average coffee enthusiast.
 
 I studied at Cal Poly Pomona from 2019 to 2023, where I was part of a club called [SWIFT](https://www.calpolyswift.org/) and also competed in CCDC and CPTC through [CPP Cyber](https://cysec.team/).
 
-Currently, my main focus lies within offensive security. I've also worked with computer networking, security engineering, and cloud technologies.
+Currently, my main focus lies within offensive security, but in the past I've also worked in other aspects of information technology such as computer networking, security engineering, and cloud infrastructure.
 
 This page will contain blog posts on my technical and personal learning experiences. I hope that you take something away from my posts!
 
