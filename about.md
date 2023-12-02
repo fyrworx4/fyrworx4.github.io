@@ -22,3 +22,4 @@ Other great blogs to read:
 - [rsecke.com](https://rsecke.com/)
 - [dumosuku](https://tranderrick1.github.io/)
 - [nigerald](https://dtsec.us/)
+- [palmer](https://covertzz.github.io)
