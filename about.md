@@ -19,6 +19,7 @@ Other great blogs to read:
 - [nosecurity.blog](https://nosecurity.blog/)
 - [gabrielfok.us](https://gabrielfok.us/)
 - [bri5ee.sh](https://bri5ee.sh/)
+- [jessicaleung](https://jessicacleung.com)
 - [rsecke.com](https://rsecke.com/)
 - [dumosuku](https://tranderrick1.github.io/)
 - [nigerald](https://dtsec.us/)
