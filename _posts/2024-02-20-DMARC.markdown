@@ -161,12 +161,12 @@ Think about the time you interacted with the Linux terminal for the first time, 
 
 # References
 Unlike most blogs that discuss about DMARC, these are actually pretty good:
-- <https://dmarcian.com/what-is-spf/#:~:text=With%20an%20SPF%20record%20in,on%20behalf%20of%20your%20domain.>
-- <https://dmarcian.com/what-is-dkim/>
-- <https://dmarcly.com/blog/what-is-dmarc-identifier-alignment-domain-alignment>
-- <https://dmarcian.com/rua-vs-ruf/>
+- [Dmarcian - What is SPF?](https://dmarcian.com/what-is-spf/#:~:text=With%20an%20SPF%20record%20in,on%20behalf%20of%20your%20domain.)
+- [Dmarcian - What is DKIM?](https://dmarcian.com/what-is-dkim/)
+- [Dmarcian - The Difference in DMARC Reports: RUA and RUF](<https://dmarcian.com/rua-vs-ruf/>)
+- [Dmarcly - What is DMARC Identifier Alignment (domain alignment)?](https://dmarcly.com/blog/what-is-dmarc-identifier-alignment-domain-alignment)
 
 It's also always interesting to read the RFCs as well! I'd highly recommend it since they are the original "source" of the technologies:
-- [SPF](https://www.rfc-editor.org/rfc/rfc7208.html)
-- [DKIM](https://www.rfc-editor.org/rfc/rfc6376.html)
-- [DMARC](https://www.rfc-editor.org/rfc/rfc7489.html)
+- [RFC 7208 - SPF](https://www.rfc-editor.org/rfc/rfc7208.html)
+- [RFC 6376 - DKIM](https://www.rfc-editor.org/rfc/rfc6376.html)
+- [RFC 7489 - DMARC](https://www.rfc-editor.org/rfc/rfc7489.html)
