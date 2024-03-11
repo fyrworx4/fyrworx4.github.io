@@ -1,5 +1,5 @@
 ---
-title: How To Learn Cybersecurity
+title: Learning How To Learn Cyber
 layout: post
 date: 2023-08-18 19:00
 image: /assets/images/markdown.jpg
@@ -13,11 +13,11 @@ description: A reflection of my learning experiences
 
 TLDR: it takes tremendous time, effort, and discipline to learn and become good at cyber. (shocker)
 
-After graduating and starting my new role as a red teamer, I've taken the time to reflect on my previous experiences of my cybersecurity education – what worked best for me, what didn't work, and my thoughts overall.
+After graduating and starting a new big boy gig, I've taken the time to reflect on my previous experiences of my cybersecurity education – what worked best for me, what didn't work, and my thoughts overall.
 
 ### Stay involved
 
-The downfall of many students is that they don't get involved. If you surround yourself with the right people, you'll be learning so much in such a short amount of time. Not just because the knowledge of others will rub off onto you but you'll develop the right mindset to push yourself and be in the right place to share your knowledge.
+If you surround yourself with the right people, you'll be learning so much in such a short amount of time. Not just because the knowledge of others will rub off onto you but you'll develop the right mindset to push yourself and be in the right place to share your knowledge.
 
 When I was a student at Cal Poly Pomona, I joined a cybersecurity club called [SWIFT](https://www.calpolyswift.org/). To be honest, it weren't the workshops or the meetings that had the most value to me. It was being able to meet like-minded people and work with talented individuals in projects and competitions. One thing I realized is that when you're in a group with talented teammates, don't be that one person to drag the entire team down. Learn how to be accountable for yourself and contribute good value to your teammates. (Hopefully everyone on your team has the same mindset as well)
 
