@@ -149,6 +149,11 @@ It seems that SPF and DKIM both pass but DMARC fails. Let's take a closer look a
   <img src="../assets/images/dmarc/headers-2.png" width="80%"/>
 </p>
 
+If we only look at the important headers, we can extract the following domains used for each header:
+- `Return-Path` header (Used for SPF) - `amazonses.com`
+- `d=` value from `DKIM-Signature` header (Used for DKIM) - `amazonses.com`
+- `From:` header - `gmail.com`
+
 SPF uses the domain of the `Return-Path` header to perform the SPF check. If we look at the `Return-Path` of this email message, we can see that it is `amazonses.com`. Similarly, if we look at the domain used to validate DKIM, it is also `amazonses.com`, listed as the `d=` field in the `DKIM-Signature` header.
 
 However, our `From` address is a `gmail.com` domain. Because `gmail.com` is different then the SPF- and DKIM-validated domain of `amazonses.com`, DMARC authentication fails.
