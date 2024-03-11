@@ -15,6 +15,8 @@ Many blogs and write-ups describe DMARC as an additional security measure that b
 
 Yes I'm looking at you, Mimecast.
 
+The issue with these blogs is that they don't really explain what's going on behind the scenes. They throw together some terms like "alignment" and "verification". But what exactly is "alignment"? How is an email message "verified"? And why does DMARC fail even when both SPF and DKIM pass?
+
 The goal here is to provide a technical overview of how SPF, DKIM, and DMARC work without having to deal with the BS of vendors forcing their product into your faces.
 
 # DMARC in a nutshell
