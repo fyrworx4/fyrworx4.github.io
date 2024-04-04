@@ -1,5 +1,5 @@
 ---
-title: Uncovering the Holy Trinity of Email Verification - SPF, DKIM, and DMARC
+title: The Holy Trinity of Email Verification - SPF, DKIM, and DMARC
 layout: post
 date: 2024-02-20 19:00
 image: /assets/images/markdown.jpg
