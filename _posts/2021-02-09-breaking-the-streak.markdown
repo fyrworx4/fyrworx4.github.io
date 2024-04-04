@@ -5,8 +5,7 @@ date: 2021-02-09 22:01
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
-- ccdc
-- personal
+- competitions
 category: blog
 author: taylornguyen
 description: A big learning experience

@@ -15,7 +15,7 @@ Currently, my main focus lies within offensive security, but in the past I've al
 
 This page will contain blog posts on my technical and personal learning experiences. I hope that you take something away from my posts!
 
-Other great blogs to read:
+Other great blogs made by some of my buddies:
 - [nosecurity.blog](https://nosecurity.blog/){:target="_blank"}
 - [gabrielfok.us](https://gabrielfok.us/){:target="_blank"}
 - [bri5ee.sh](https://bri5ee.sh/){:target="_blank"}

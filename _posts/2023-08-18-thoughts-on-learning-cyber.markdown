@@ -5,7 +5,7 @@ date: 2023-08-18 19:00
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
-- misc
+- personal
 category: blog
 author: taylornguyen
 description: A reflection of my learning experiences

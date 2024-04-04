@@ -5,7 +5,7 @@ date: 2021-11-03 22:01
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
-- rvb
+- competitions
 category: blog
 author: taylornguyen
 description: A cool experience
