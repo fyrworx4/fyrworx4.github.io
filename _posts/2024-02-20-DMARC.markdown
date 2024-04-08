@@ -67,8 +67,8 @@ And each of the items:
 Each of the items in the SPF record are called "mechanisms". So you would refer to `mx` as the `mx` mechanism, `ip4` as the `ip4` mechanism, and so on. In general, they're referred to as "tags" but in SPF they're specifically "mechanisms".
 
 You may see `~all` or `+all` or `?all` in other SPF records. The character behind the `all` are referred to as qualifiers or prefixes. Here's what they mean:
-- `-all` - also known as a **hardfail**, emails that don't match the allowed IP addresses are rejected
-- `~all` - also known as a **softfail**, emails that don't match the allowed IP addresses are still delivered but are flagged with an SPF fail check
+- `-all` - also known as a hardfail, emails that don't match the allowed IP addresses are rejected
+- `~all` - also known as a softfail, emails that don't match the allowed IP addresses are still delivered but are flagged with an SPF fail check
 - `+all` - emails that don't match the allowed IP addresses still get delivered anyways
 - `?all` - don't perform SPF verification at all and deliver the email anyways
 
@@ -97,7 +97,7 @@ v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDESbiiHOv8WD5RPZ8UAYkS+r
 - `k=rsa` - the type of key being used in the `p` field
 - `p=MIGf...` - the DKIM public key used to decrypt digital signatures
 
-In order to query the DKIM record, you would need to know the **selector** that is being used. The `selector` is a value that is included in the DKIM signature to specify the location of the DKIM record.
+In order to query the DKIM record, you would need to know the selector that is being used. The `selector` is a value that is included in the DKIM signature to specify the location of the DKIM record.
 
 Therefore, the DKIM record would be located at `[selector]._domainkey.<domain>`. 
 
@@ -117,13 +117,13 @@ There's a lot more that happens underneath the hood within DKIM, but personally 
 
 ## Extra DKIM notes
 
-**DKIM signers** usually refer to the systems within the email chain that are responsible for performing the hashing and encrypting of email messages, while **DKIM verifiers** usually refer to the systems on the receiving end of the email message that decrypt and compare the hashes. They are used more often describe the DKIM process rather than describing individual entities or systems. 
+DKIM signers usually refer to the systems within the email chain that are responsible for performing the hashing and encrypting of email messages, while DKIM verifiers usually refer to the systems on the receiving end of the email message that decrypt and compare the hashes. They are used more often describe the DKIM process rather than describing individual entities or systems. 
 
 # DMARC Alignment
 
-We've talked about how email messages can be **SPF** and **DKIM** **authenticated**. But DMARC throws in another term called **alignment**, which is super important because it's actually the **alignment** that determines whether DMARC passes or fails.
+We've talked about how email messages can be SPF and DKIM authenticated. But DMARC throws in another term called **alignment**, which is super important because it's actually the **alignment** that determines whether DMARC passes or fails.
 
-According to RFC 7489, an **authenticated identifier** is a domain that has been validated using either SPF or DKIM. That would be the `Return-Path` value for SPF and the `d=` value for DKIM.
+According to RFC 7489, an authenticated identifier is a domain that has been validated using either SPF or DKIM. That would be the `Return-Path` value for SPF and the `d=` value for DKIM.
 
 DMARC identifier alignment occurs when the domain authenticated by SPF and/or DKIM matches the `From:` header of the email message.
 
