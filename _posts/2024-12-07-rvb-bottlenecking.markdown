@@ -36,9 +36,9 @@ Yes, you kinda need to know the basics of red teaming, so doing some HTB or THM 
 - Some enumeration on web apps or other stuff, mainly checking low hanging fruits
 
 <p align="center">
-  <img src="https://i.postimg.cc/X7nKvPr1/SCR-20241207-suql.png" width="100%"/>
+  <img src="https://i.postimg.cc/R0q11nmk/SCR-20241207-svtf.png" width="100%"/>
   <br>
-  <em>HackTheBox focues most on getting initial access and persistnce, while RvB RT focuses most on persistence and defense evasion.</em>
+  <em>HackTheBox Labs focues most on getting initial access and privesc, while RvB RT focuses most on persistence and defense evasion.</em>
 </p>
 
 However we're not really trying to uncover the tiniest of misconfigurations, like you'd do on HTB/THM. The RvB environment is ripe with misconfigurations and vulnerabilities that are designed for easy initial access. We're _expecting_ low-hanging fruit vulns. Even more, we also get the default admin creds at the same time as the blue teams, so we can prepare commands and scripts to use.
