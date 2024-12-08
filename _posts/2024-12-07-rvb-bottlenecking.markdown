@@ -1,7 +1,7 @@
 ---
 title: Red vs. Blue - Red Team Bottlenecking
 layout: post
-date: 2023-10-31 19:00
+date: 2024-12-07 19:00
 image: /assets/images/markdown.jpg
 headerImage: false
 tag:
@@ -13,6 +13,7 @@ description: asdfasdfasdf
 
 <p align="center">
   <img src="https://media.discordapp.net/attachments/754129859554443286/1307788955181256805/image.png?ex=6755f2e0&is=6754a160&hm=360095328a2c0f7e3bef9c3aa44d070ed91dad0ac69281cc49eb601e8d442619&=&format=webp&quality=lossless" width="50%"/>
+  <br>
   <em>We had just under 2000 beacons</em>
 </p>
 
